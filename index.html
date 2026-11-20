@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#5BBEFF">
+<title>Toba's Play World</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<section id="hub" class="screen active">
+  <div class="sky" id="sky"><div class="sun"></div></div>
+  <button class="rbtn mute" id="muteBtn" aria-label="Sound on or off"></button>
+  <h1 class="title" id="title">Toba's Play World</h1>
+  <div class="hub-grid">
+    <button class="hub-btn" data-scene="paint" aria-label="Painting studio" style="--bg:#FF8FB8"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="coloring" aria-label="Coloring pages" style="--bg:#FFD54F"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="dressup" aria-label="Dress up" style="--bg:#B79CFF"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="kitchen" aria-label="Kitchen" style="--bg:#FF9F5A"><span class="hub-art"></span></button>
+  </div>
+  <div class="ground"><div class="family" id="family"></div></div>
+</section>
+
+<section id="paint" class="screen"></section>
+<section id="coloring" class="screen"></section>
+<section id="dressup" class="screen"></section>
+<section id="kitchen" class="screen"></section>
+
+<script src="js/audio.js"></script>
+<script src="js/art.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/main.js"></script>
+<script src="js/hub.js"></script>
+<script src="js/paint.js"></script>
+<script src="js/coloring.js"></script>
+<script src="js/dressup.js"></script>
+<script src="js/kitchen.js"></script>
+<script>TW.boot();</script>
+</body>
+</html>
