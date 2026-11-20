@@ -88,6 +88,12 @@ TW.sound = (function () {
     swish: function () { noise(0.25, { from: 1800, to: 600, vol: 0.12 }); },
     munch: function () { [0, 0.16, 0.32].forEach(function (d) { noise(0.09, { from: 900, to: 500, vol: 0.25, delay: d }); }); },
     sizzle: function () { noise(1.4, { from: 3000, to: 2600, vol: 0.05, q: 0.7 }); },
+    beep: function (f) { tone(f || 880, 0.16, { type: 'square', vol: 0.06 }); },
+    flutter: function () { for (let i = 0; i < 6; i++) noise(0.07, { from: 2500, to: 1400, vol: 0.12, delay: i * 0.09 }); },
+    rumble: function (dur) { noise(dur || 3, { from: 160, to: 90, q: 0.8, vol: 0.35 }); },
+    fizz: function () { noise(0.9, { from: 4000, to: 1800, vol: 0.09, q: 0.6 }); tone(500, 0.2, { to: 900, vol: 0.1, delay: 0.1 }); },
+    bloop: function () { tone(260 + Math.random() * 120, 0.18, { to: 640, vol: 0.16 }); },
+    sparkle: function () { [1568, 2093, 2637, 3136].forEach(function (f, i) { tone(f, 0.3, { type: 'triangle', vol: 0.06, delay: i * 0.06 }); }); },
     isMuted: function () { return muted; },
     setMuted: function (m) {
       muted = m;

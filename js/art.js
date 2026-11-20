@@ -25,18 +25,21 @@ window.TW = window.TW || {};
   };
 
   function puppy(o) {
-    const c = Object.assign({ body: '#F4A259', ear: '#D2691E', belly: '#FFE6C7', small: false, extra: '', vb: '0 0 200 240', size: true }, o);
+    const c = Object.assign({ body: '#F4A259', ear: '#D2691E', belly: '#FFE6C7', small: false, extra: '', vb: '0 0 200 240', size: true,
+      back: '', outfit: '', cheek: '#FF8FA3', cheekOp: 0.55, ov: false }, o);
     const br = c.small ? 46 : 56, by = c.small ? 180 : 172, hr = c.small ? 56 : 58;
     const parts = c.vb.split(' ');
     const wh = c.size ? ` width="${parts[2]}" height="${parts[3]}"` : '';
     const tx = 100 + br;
-    return `<svg ${NS} viewBox="${c.vb}"${wh}>
+    return `<svg ${NS} viewBox="${c.vb}"${wh}${c.ov ? ' overflow="visible"' : ''}>
+${c.back}
 <g stroke="${O}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
 <path d="M${tx - 10} ${by + 8} Q${tx + 36} ${by - 6} ${tx + 30} ${by - 50} Q${tx + 20} ${by - 54} ${tx + 16} ${by - 44} Q${tx + 18} ${by - 14} ${tx - 14} ${by - 6} Z" fill="${c.ear}"/>
 <circle cx="100" cy="${by}" r="${br}" fill="${c.body}"/>
 <ellipse cx="100" cy="${by + 10}" rx="${br * 0.58}" ry="${br * 0.66}" fill="${c.belly}"/>
 <ellipse cx="${100 - br * 0.52}" cy="${by + br - 4}" rx="20" ry="11" fill="${c.body}"/>
 <ellipse cx="${100 + br * 0.52}" cy="${by + br - 4}" rx="20" ry="11" fill="${c.body}"/>
+${c.outfit}
 <circle cx="100" cy="88" r="${hr}" fill="${c.body}"/>
 <ellipse cx="46" cy="94" rx="20" ry="40" fill="${c.ear}" transform="rotate(18 46 94)"/>
 <ellipse cx="154" cy="94" rx="20" ry="40" fill="${c.ear}" transform="rotate(-18 154 94)"/>
@@ -46,7 +49,7 @@ window.TW = window.TW || {};
 <circle cx="122" cy="84" r="8" fill="${O}"/><circle cx="125" cy="81" r="3" fill="#fff"/>
 <ellipse cx="100" cy="102" rx="11" ry="8" fill="${O}"/>
 <path d="M89 114 Q100 124 111 114" fill="none" stroke="${O}" stroke-width="3.5" stroke-linecap="round"/>
-<circle cx="66" cy="108" r="8" fill="#FF8FA3" opacity=".55"/><circle cx="134" cy="108" r="8" fill="#FF8FA3" opacity=".55"/>
+<circle cx="66" cy="108" r="8" fill="${c.cheek}" opacity="${c.cheekOp}"/><circle cx="134" cy="108" r="8" fill="${c.cheek}" opacity="${c.cheekOp}"/>
 ${c.extra}
 </svg>`;
   }
@@ -167,8 +170,13 @@ ${c.extra}
       size: false, vb: '0 -36 200 276',
       extra: `<path d="M100 -22 L72 40 Q100 52 128 40 Z" fill="#7BD3F7" stroke="${O}" stroke-width="4" stroke-linejoin="round"/><path d="M88 6 Q100 12 112 6" fill="none" stroke="#FF6FA8" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="-24" r="9" fill="#FFD93D" stroke="${O}" stroke-width="3"/><g fill="rgba(255,255,255,.3)" stroke="#FF3D8B" stroke-width="5"><circle cx="78" cy="84" r="16"/><circle cx="122" cy="84" r="16"/></g><path d="M94 82 Q100 77 106 82" fill="none" stroke="#FF3D8B" stroke-width="4"/>`
     })),
-    kitchen: `<svg ${NS} viewBox="0 0 120 120"><circle cx="60" cy="62" r="50" fill="#F1C885" stroke="${O}" stroke-width="5"/><circle cx="60" cy="62" r="40" fill="#E0482E"/><g fill="#FFE066"><rect x="34" y="44" width="16" height="6" rx="3" transform="rotate(20 42 47)"/><rect x="66" y="80" width="16" height="6" rx="3" transform="rotate(-25 74 83)"/><rect x="70" y="40" width="14" height="6" rx="3"/></g><g fill="#C8322B" stroke="#8E1F1A" stroke-width="2"><circle cx="46" cy="66" r="9"/><circle cx="74" cy="58" r="9"/><circle cx="58" cy="84" r="8"/><circle cx="62" cy="40" r="7"/></g><g fill="none" stroke="#2A2A2A" stroke-width="4"><circle cx="82" cy="74" r="4.5"/><circle cx="40" cy="82" r="4.5"/></g><path d="M30 34 Q34 22 44 28" fill="none" stroke="#3DAA5C" stroke-width="6" stroke-linecap="round"/></svg>`
+    kitchen: `<svg ${NS} viewBox="0 0 120 120"><circle cx="60" cy="62" r="50" fill="#F1C885" stroke="${O}" stroke-width="5"/><circle cx="60" cy="62" r="40" fill="#E0482E"/><g fill="#FFE066"><rect x="34" y="44" width="16" height="6" rx="3" transform="rotate(20 42 47)"/><rect x="66" y="80" width="16" height="6" rx="3" transform="rotate(-25 74 83)"/><rect x="70" y="40" width="14" height="6" rx="3"/></g><g fill="#C8322B" stroke="#8E1F1A" stroke-width="2"><circle cx="46" cy="66" r="9"/><circle cx="74" cy="58" r="9"/><circle cx="58" cy="84" r="8"/><circle cx="62" cy="40" r="7"/></g><g fill="none" stroke="#2A2A2A" stroke-width="4"><circle cx="82" cy="74" r="4.5"/><circle cx="40" cy="82" r="4.5"/></g><path d="M30 34 Q34 22 44 28" fill="none" stroke="#3DAA5C" stroke-width="6" stroke-linecap="round"/></svg>`,
+    wizard: `<svg ${NS} viewBox="0 0 120 120"><path d="M70 6 Q56 40 24 86 Q60 102 96 86 Q80 48 70 6 Z" fill="#6A4BD8" stroke="${O}" stroke-width="5" stroke-linejoin="round"/><ellipse cx="60" cy="88" rx="48" ry="13" fill="#4A30A8" stroke="${O}" stroke-width="5"/><path d="${starPath(58, 52, 10, 4)} ${starPath(74, 70, 7, 3)} ${starPath(46, 74, 6, 2.5)}" fill="#FFD93D"/><circle cx="70" cy="6" r="7" fill="#FFD93D" stroke="${O}" stroke-width="3"/><path d="${starPath(100, 30, 11, 4.5)}" fill="#FFF3B0" stroke="${O}" stroke-width="3" stroke-linejoin="round"/></svg>`,
+    space: `<svg ${NS} viewBox="0 0 120 120"><path d="M46 92 Q60 118 74 92 Z" fill="#FFB347" stroke="${O}" stroke-width="4" stroke-linejoin="round"/><path d="M36 66 L18 92 L40 88 Z M84 66 L102 92 L80 88 Z" fill="#8E5BD1" stroke="${O}" stroke-width="5" stroke-linejoin="round"/><path d="M60 8 Q90 34 86 90 H34 Q30 34 60 8 Z" fill="#FF9CD0" stroke="${O}" stroke-width="5" stroke-linejoin="round"/><circle cx="60" cy="50" r="15" fill="#7FD6FF" stroke="${O}" stroke-width="5"/><circle cx="55" cy="45" r="4" fill="#fff"/></svg>`,
+    vanity: `<svg ${NS} viewBox="0 0 120 120"><path d="M34 26 L32 6 L46 16 L60 2 L74 16 L88 6 L86 26 Z" fill="#FFD23F" stroke="${O}" stroke-width="4" stroke-linejoin="round"/><ellipse cx="60" cy="58" rx="34" ry="36" fill="#F2C14E" stroke="${O}" stroke-width="5"/><ellipse cx="60" cy="58" rx="24" ry="26" fill="#D7F1FF" stroke="${O}" stroke-width="4"/><path d="M68 42 L78 56" stroke="#fff" stroke-width="5" stroke-linecap="round"/><rect x="14" y="92" width="92" height="16" rx="6" fill="#FFF0F6" stroke="${O}" stroke-width="5"/><circle cx="30" cy="86" r="7" fill="#FFFDF4" stroke="${O}" stroke-width="3"/><rect x="84" y="74" width="12" height="18" fill="#FF4F9A" stroke="${O}" stroke-width="3"/></svg>`,
+    lab: `<svg ${NS} viewBox="0 0 120 120"><path d="M44 70 H76 L94 98 Q96 108 86 108 H34 Q24 108 26 98 Z" fill="#57E08A"/><path d="M48 10 H72 V46 L98 98 Q100 110 88 110 H32 Q20 110 22 98 L48 46 Z" fill="rgba(255,255,255,.35)" stroke="${O}" stroke-width="5" stroke-linejoin="round"/><rect x="42" y="6" width="36" height="10" rx="4" fill="#E6F2FA" stroke="${O}" stroke-width="4"/><g fill="#fff"><circle cx="50" cy="94" r="5"/><circle cx="66" cy="84" r="4"/><circle cx="74" cy="98" r="3.5"/></g><circle cx="88" cy="30" r="7" fill="#9FE8FF" stroke="${O}" stroke-width="3"/><circle cx="100" cy="14" r="5" fill="#9FE8FF" stroke="${O}" stroke-width="3"/></svg>`,
+    dragon: `<svg ${NS} viewBox="0 0 120 120"><path d="M30 34 L26 8 L44 26 Z M90 34 L94 8 L76 26 Z" fill="#FFD23F" stroke="${O}" stroke-width="4" stroke-linejoin="round"/><ellipse cx="60" cy="60" rx="46" ry="40" fill="#FF8CC8" stroke="${O}" stroke-width="5"/><ellipse cx="60" cy="80" rx="28" ry="18" fill="#FFB3DA" stroke="${O}" stroke-width="4"/><circle cx="52" cy="78" r="3" fill="${O}"/><circle cx="68" cy="78" r="3" fill="${O}"/><circle cx="42" cy="52" r="9" fill="${O}"/><circle cx="45" cy="49" r="3.5" fill="#fff"/><circle cx="78" cy="52" r="9" fill="${O}"/><circle cx="81" cy="49" r="3.5" fill="#fff"/><path d="M52 90 Q60 96 68 90" fill="none" stroke="${O}" stroke-width="3.5" stroke-linecap="round"/><circle cx="26" cy="68" r="7" fill="#FF6FA8" opacity=".5"/><circle cx="94" cy="68" r="7" fill="#FF6FA8" opacity=".5"/></svg>`
   };
 
-  TW.art = { O: O, NS: NS, FAMILY: FAMILY, puppy: puppy, pup: pup, sisterDress: sisterDress, heartSvg: heartSvg, starSvg: starSvg, starPath: starPath, svgUrl: svgUrl, icons: icons, topping: topping, pizzaSvg: pizzaSvg, ovenSvg: ovenSvg, hubArt: hubArt };
+  TW.art = { parts: { BOW: BOW, TUFT: TUFT, FLOWER: FLOWER, LASHES: LASHES, BROWS: BROWS, BOWTIE: BOWTIE }, O: O, NS: NS, FAMILY: FAMILY, puppy: puppy, pup: pup, sisterDress: sisterDress, heartSvg: heartSvg, starSvg: starSvg, starPath: starPath, svgUrl: svgUrl, icons: icons, topping: topping, pizzaSvg: pizzaSvg, ovenSvg: ovenSvg, hubArt: hubArt };
 })();

@@ -16,11 +16,18 @@
   <div class="sky" id="sky"><div class="sun"></div></div>
   <button class="rbtn mute" id="muteBtn" aria-label="Sound on or off"></button>
   <h1 class="title" id="title">Toba's Play World</h1>
+  <div class="hub-scroll scrolly">
   <div class="hub-grid">
     <button class="hub-btn" data-scene="paint" aria-label="Painting studio" style="--bg:#FF8FB8"><span class="hub-art"></span></button>
     <button class="hub-btn" data-scene="coloring" aria-label="Coloring pages" style="--bg:#FFD54F"><span class="hub-art"></span></button>
     <button class="hub-btn" data-scene="dressup" aria-label="Dress up" style="--bg:#B79CFF"><span class="hub-art"></span></button>
     <button class="hub-btn" data-scene="kitchen" aria-label="Kitchen" style="--bg:#FF9F5A"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="wizard" aria-label="Wizard world" style="--bg:#4B5BD6"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="space" aria-label="Space world" style="--bg:#E58BD8"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="vanity" aria-label="Princess vanity" style="--bg:#FFB3C7"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="lab" aria-label="Scientist lab" style="--bg:#7FD6C2"><span class="hub-art"></span></button>
+    <button class="hub-btn" data-scene="dragon" aria-label="Dragon friend" style="--bg:#9BE07A"><span class="hub-art"></span></button>
+  </div>
   </div>
   <div class="ground"><div class="family" id="family"></div></div>
 </section>
@@ -29,6 +36,12 @@
 <section id="coloring" class="screen"></section>
 <section id="dressup" class="screen"></section>
 <section id="kitchen" class="screen"></section>
+<section id="wizard" class="screen"></section>
+<section id="space" class="screen"></section>
+<section id="vanity" class="screen"></section>
+<section id="lab" class="screen"></section>
+<section id="dragon" class="screen"></section>
+
 
 <script src="js/audio.js"></script>
 <script src="js/art.js"></script>
@@ -39,6 +52,13 @@
 <script src="js/coloring.js"></script>
 <script src="js/dressup.js"></script>
 <script src="js/kitchen.js"></script>
+<script src="js/room.js"></script>
+<script src="js/wizard.js"></script>
+<script src="js/space.js"></script>
+<script src="js/vanity.js"></script>
+<script src="js/lab.js"></script>
+<script src="js/dragon.js"></script>
+
 <script>TW.boot();</script>
 </body>
 </html>
