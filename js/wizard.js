@@ -51,12 +51,13 @@
         tap: function (api) { TW.sound.boing(); api.play('pup', 'bounce'); } },
       { id: 'wand', pos: { L: [630, 380, 1], P: [460, 580, 1] }, hit: [130, 150],
         draw: `<path d="M-34 56 L34 -44" stroke="${O}" stroke-width="12" stroke-linecap="round"/><path d="M-34 56 L34 -44" stroke="#8B5A2B" stroke-width="6" stroke-linecap="round"/>
-<path d="${sp(40, -52, 24, 10)}" fill="#FFD93D" ${st}/>`,
+<path d="${sp(40, -52, 24, 10)}" fill="#FFD93D" ${st}/>
+<path class="twinkle" d="${sp(70, -76, 9, 3.5)}" fill="#FFF6C2"/><path class="twinkle" style="animation-delay:-.8s" d="${sp(12, -82, 7, 3)}" fill="#FFF6C2"/><path class="twinkle" style="animation-delay:-1.6s" d="${sp(74, -30, 6, 2.5)}" fill="#FFF6C2"/>`,
         tap: function (api) {
           const p = api.local('wand', 40, -52);
           TW.fx.burst(p.x, p.y, { count: 22 });
           setTimeout(function () { TW.fx.burst(p.x, p.y, { count: 12, colors: ['#FFFFFF', '#FFF3B0', '#C9A8FF'] }); }, 250);
-          TW.sound.sparkle(); api.play('wand', 'wiggle');
+          TW.sound.chime(); TW.sound.sparkle(); api.play('wand', 'wiggle');
         } },
       { id: 'telescope', pos: { L: [200, 350, 1], P: [110, 450, 0.85] }, hit: [170, 200],
         draw: `<path d="M0 10 L-44 92 M0 10 L44 92 M0 10 L0 92" stroke="${O}" stroke-width="8" stroke-linecap="round"/>
@@ -91,7 +92,7 @@
           const p = api.local('potion', 0, -80);
           TW.fx.bubbles(p.x, p.y, 7, s.glow);
           TW.sound.bloop(); setTimeout(TW.sound.bloop, 200);
-          setTimeout(function () { TW.sound.chime(); api.play('pup', 'bounce'); }, 500);
+          setTimeout(function () { TW.sound.chime(); api.play('pup', 'bounce'); TW.voice.praise(); }, 500);
         } },
       { id: 'crystal', pos: { L: [830, 420, 1], P: [480, 860, 0.9] }, hit: [160, 190],
         draw: api => `<path d="M-52 80 L52 80 L38 44 L-38 44 Z" fill="#8B5A2B" ${st}/>

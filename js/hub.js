@@ -40,12 +40,15 @@
       setTimeout(function () { TW.show(b.dataset.scene); }, 220);
     });
 
+    const GREETINGS = ['Salaam, Toba!', "Let's play!", 'Pick a game!'];
+    let greet = 0;
     const fam = document.getElementById('family');
     ['dad', 'mum', 'sister', 'baby'].forEach(function (n) {
       const d = document.createElement('div');
       d.className = 'fam-pup ' + n;
       d.innerHTML = A.pup(n);
       d.addEventListener('pointerdown', function () {
+        TW.voice.say(GREETINGS[greet++ % GREETINGS.length]);
         TW.sound.boing();
         TW.fx.bounce(d);
         const r = d.getBoundingClientRect();
@@ -62,6 +65,7 @@
     mute.addEventListener('click', function () {
       TW.sound.setMuted(!TW.sound.isMuted());
       paintMute();
+      if (!TW.sound.isMuted()) TW.sound.musicStart();
       TW.sound.pop();
     });
     paintMute();

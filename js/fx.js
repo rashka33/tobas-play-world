@@ -80,6 +80,17 @@ window.TW = window.TW || {};
         a.onfinish = function () { d.remove(); };
       }
     },
+    // A single star that twinkles in place and fades (paint trails).
+    twinkle: function (x, y, color) {
+      const d = spawn('twinkle-dot', TW.art.starSvg(color || '#FFD93D'), x + (Math.random() - 0.5) * 16, y + (Math.random() - 0.5) * 16);
+      if (!d.animate) { d.remove(); return; }
+      const a = d.animate([
+        { transform: 'scale(.2) rotate(0deg)', opacity: 0 },
+        { transform: 'scale(1.1) rotate(60deg)', opacity: 1, offset: 0.3 },
+        { transform: 'scale(.3) rotate(140deg)', opacity: 0 }
+      ], { duration: 700, easing: 'ease-out' });
+      a.onfinish = function () { d.remove(); };
+    },
     // Restart a one-shot CSS animation class.
     bounce: function (el, cls) {
       cls = cls || 'bounce';

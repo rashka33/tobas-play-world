@@ -19,6 +19,7 @@
     return `<path d="M-30 14 H30 L44 46 Q46 56 36 56 H-36 Q-46 56 -44 46 Z" fill="${color}"/>
 <g class="bubs" fill="#fff" opacity=".8"><circle class="bub" cx="-14" cy="48" r="5"/><circle class="bub" style="animation-delay:-.6s" cx="6" cy="50" r="4"/><circle class="bub" style="animation-delay:-1.1s" cx="20" cy="46" r="3.5"/></g>
 <path d="M-14 -60 H14 V-24 L44 46 Q46 56 36 56 H-36 Q-46 56 -44 46 L-14 -24 Z" fill="rgba(255,255,255,.25)" ${st}/>
+<g fill="${color}" stroke="${O}" stroke-width="2"><circle class="bub-out" cx="-4" cy="-72" r="6"/><circle class="bub-out" style="animation-delay:-.9s" cx="6" cy="-74" r="4.5"/></g>
 <rect x="-19" y="-68" width="38" height="10" rx="4" fill="#E6F2FA" ${st}/><path d="M-26 30 L-34 46" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".7"/>`;
   }
 
@@ -41,6 +42,7 @@
             const b = api.local('beaker', 0, -60);
             TW.fx.bubbles(b.x, b.y, 8, s.beaker);
             TW.fx.burst(b.x, b.y, { count: 10, colors: [s.beaker, '#FFFFFF', '#FFF3B0'] });
+            TW.voice.praise();
           }, 250);
         } else {
           s.last = i;

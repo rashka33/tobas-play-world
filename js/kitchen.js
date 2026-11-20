@@ -3,6 +3,8 @@
   const A = TW.art, I = A.icons;
   const TOPS = ['pepperoni', 'mushroom', 'olive', 'pepper', 'tomato', 'pineapple', 'basil', 'cheese'];
   const MAX_TOPS = 90, RIM = 0.68;
+  const SAY = { pepperoni: 'Pepperoni!', mushroom: 'Mushroom!', olive: 'Olive!', pepper: 'Green pepper!',
+    tomato: 'Tomato!', pineapple: 'Pineapple!', basil: 'Basil!', cheese: 'Cheese!' };
 
   let el, cell, pizza, tops, pupEl, bins;
   let baked = false, baking = false, serving = false, drag = null, pz = null, offX = 0, offY = 0;
@@ -114,6 +116,7 @@
     }
     el.classList.add('has-tops');
     TW.sound.pop();
+    TW.voice.say(SAY[kind]);
     TW.fx.burst(r.left + R + nx * R, r.top + R + ny * R, { count: 4 });
   }
 
@@ -134,10 +137,11 @@
     baking = true;
     el.classList.add('baking');
     TW.sound.whoosh();
-    setTimeout(function () { TW.sound.sizzle(); }, 450);
+    setTimeout(function () { TW.sound.sizzle(2); }, 450);
     setTimeout(function () { pizza.classList.add('baked'); }, 1200);
     setTimeout(function () {
       TW.sound.ding();
+      TW.voice.praise();
       el.classList.remove('baking');
       baking = false;
       baked = true;
@@ -192,7 +196,7 @@
       TW.fx.bounce(pupEl, 'happy');
       const r = pupEl.getBoundingClientRect();
       TW.fx.hearts(r.left + r.width / 2, r.top + r.height * 0.25, 9);
-      setTimeout(function () { TW.sound.chime(); }, 450);
+      setTimeout(function () { TW.sound.chime(); TW.voice.praise(); }, 450);
     }, 760);
     setTimeout(resetPizza, 2400);
   }

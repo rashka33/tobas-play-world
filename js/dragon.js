@@ -65,6 +65,15 @@ ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a =>
     id: 'dragon',
     defs: `<clipPath id="shieldClip"><path d="${SHIELD_PATH}"/></clipPath>`,
     state: { crownOn: 'pup', holding: false, open: [false, false, false, false, false] },
+    // Every so often the dragon gives a happy flap all by itself.
+    init: function (api) {
+      (function loop() {
+        setTimeout(function () {
+          if (api.el().classList.contains('active')) api.play('dragon', 'flap');
+          loop();
+        }, 5000 + Math.random() * 4000);
+      })();
+    },
     bg: bg,
     items: [
       flowerItem(0, [70, 548, 1], [70, 860, 1]),

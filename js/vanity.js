@@ -46,6 +46,7 @@
 <ellipse cx="${m[0]}" cy="${m[1]}" rx="${m[2] + 20}" ry="${m[3] + 20}" fill="#F2C14E" ${st}/>
 <ellipse cx="${m[0]}" cy="${m[1]}" rx="${m[2]}" ry="${m[3]}" fill="#D7F1FF" ${st}/>
 <path d="M${m[0] + 60} ${m[1] - 110} L${m[0] + 110} ${m[1] - 40} M${m[0] + 80} ${m[1] - 120} L${m[0] + 122} ${m[1] - 64}" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+${[[-80, -90, 0], [70, -40, -1.5], [-60, 60, -3], [90, 90, -2.2]].map(g => `<path class="glint" style="animation-delay:${g[2]}s" d="${sp(m[0] + g[0], m[1] + g[1], 16, 4)}" fill="#fff"/>`).join('')}
 <g transform="translate(${m[0]} ${crownY})"><path d="M-60 0 L-66 -54 L-32 -26 L0 -62 L32 -26 L66 -54 L60 0 Z" fill="#FFD23F" ${st}/><circle cy="-16" r="9" fill="#FF4D6D" ${st}/><circle cx="-36" cy="-12" r="6" fill="#3FA7FF" ${st}/><circle cx="36" cy="-12" r="6" fill="#4CC96B" ${st}/></g>`;
   }
 

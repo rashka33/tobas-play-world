@@ -73,6 +73,9 @@ ${small ? '<path class="dl" d="M92 36 Q94 18 102 30 Q106 16 112 32"/>' : ''}
       '<circle class="rg" cx="286" cy="292" r="36"/><circle class="rg" cx="286" cy="292" r="14"/>')
   };
   const IDS = Object.keys(PICTURES);
+  const NAMES = { '#FF4D4D': 'Red!', '#FF9F1C': 'Orange!', '#FFD93D': 'Yellow!', '#4CC96B': 'Green!', '#3FA7FF': 'Blue!',
+    '#A86BFF': 'Purple!', '#FF7AC6': 'Pink!', '#9B5E35': 'Brown!', '#8FD3FF': 'Sky blue!', '#333333': 'Black!' };
+  const praised = {};
 
   let el, stage, toolbar, color = COLORS[0], mode = 'fill', current = IDS[0], dpr = 1, side = 0;
   const pics = {};
@@ -108,6 +111,15 @@ ${small ? '<path class="dl" d="M92 36 Q94 18 102 30 Q106 16 112 32"/>' : ''}
       r.style.fill = color;
       TW.sound.pop();
       TW.fx.burst(e.clientX, e.clientY, { count: 5, colors: [color, '#FFD93D', '#ffffff'] });
+      // Most of the picture colored in? Cheer once for it.
+      const regs = pics[current].box.querySelectorAll('.rg');
+      const done = [...regs].filter(x => x.style.fill).length;
+      if (!praised[current] && done >= regs.length * 0.8) {
+        praised[current] = true;
+        TW.voice.praise(); TW.sound.chime();
+        const c = TW.fx.center(pics[current].box);
+        TW.fx.burst(c.x, c.y, { count: 24 });
+      }
     });
 
     el.querySelector('.thumbs').addEventListener('click', function (e) {
@@ -121,12 +133,13 @@ ${small ? '<path class="dl" d="M92 36 Q94 18 102 30 Q106 16 112 32"/>' : ''}
     toolbar.addEventListener('click', function (e) {
       const b = e.target.closest('button');
       if (!b) return;
-      if (b.dataset.color) { color = b.dataset.color; TW.sound.pop(); }
+      if (b.dataset.color) { color = b.dataset.color; TW.sound.pop(); TW.voice.say(NAMES[color]); }
       else if (b.dataset.mode) { mode = b.dataset.mode; TW.sound.pop(); }
       else if ('clear' in b.dataset) {
         const p = pics[current];
         p.box.querySelectorAll('.rg').forEach(r => { r.style.fill = ''; });
         p.ctx.clearRect(0, 0, p.canvas.width, p.canvas.height);
+        praised[current] = false;
         TW.sound.swish();
         const c = TW.fx.center(p.box);
         TW.fx.burst(c.x, c.y, { count: 14 });

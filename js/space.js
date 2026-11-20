@@ -41,8 +41,14 @@
       : `<path d="M-400 830 H1000 V2000 H-400 Z" fill="#8E5BD1" ${st}/><path d="M-400 850 H1000" stroke="#B48BEA" stroke-width="10"/>`;
     let ribs = '';
     for (let x = -400; x < W + 400; x += 160) ribs += `<rect x="${x}" y="-3000" width="18" height="7000" fill="#F7C4E2"/>`;
+    const LC = ['#FF5A6E', '#FFD23F', '#57E08A', '#3FA7FF'];
+    let lights = '';
+    for (let i = 0; i < (L === 'L' ? 11 : 12); i++) {
+      const x = L === 'L' ? 520 + i * 42 : 52 + i * 45, y = L === 'L' ? 505 : 846;
+      lights += `<circle class="cockpit-light" style="animation-delay:${(-(i * 0.37) % 1.6).toFixed(2)}s" cx="${x}" cy="${y}" r="8" fill="${LC[i % 4]}" stroke="${O}" stroke-width="2.5"/>`;
+    }
     return `<rect x="-3000" y="-3000" width="7000" height="7000" fill="#F2A7D3"/>${ribs}
-<rect x="-3000" y="-3000" width="7000" height="${L === 'L' ? 3016 : 3016}" fill="#B07BE0"/>${con}`;
+<rect x="-3000" y="-3000" width="7000" height="3016" fill="#B07BE0"/>${con}${lights}`;
   }
 
   TW.makeRoom({
@@ -91,6 +97,7 @@ ${[0, 60, 120, 180, 240, 300].map(a => `<circle cx="${(Math.cos(a * Math.PI / 18
             api.anim('lever').classList.remove('pulled');
             blasting = false;
             TW.sound.chime();
+            TW.voice.praise();
             const c = api.center('window');
             TW.fx.burst(c.x, c.y, { count: 14 });
           }, 3000);

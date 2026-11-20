@@ -46,6 +46,10 @@
     { id: 'hat', icon: 'party' }, { id: 'glasses', icon: 'round' },
     { id: 'shirt', icon: 'stripes' }, { id: 'silly', icon: 'wings' }
   ];
+  const SAY = { party: 'Party hat!', crown: 'Crown!', cowboy: 'Cowboy hat!', chef: 'Chef hat!', flowers: 'Flowers!',
+    round: 'Glasses!', stars: 'Star glasses!', hearts: 'Heart glasses!', shades: 'Sunglasses!',
+    stripes: 'Stripy shirt!', startee: 'Star shirt!', dots: 'Spotty shirt!', heartee: 'Heart shirt!',
+    cape: 'Cape!', wings: 'Wings!', tutu: 'Tutu!', clown: 'Clown nose!', tache: 'Moustache!', bunny: 'Bunny ears!' };
   const byId = {};
   ITEMS.forEach(it => { byId[it.id] = it; });
 
@@ -110,6 +114,9 @@
       if (it.cat !== 'silly') worn.forEach(w => { if (byId[w].cat === it.cat) worn.delete(w); });
       worn.add(id);
       TW.sound.boing();
+      TW.voice.say(SAY[id]);
+      // A hat, glasses and a shirt all on: that's a whole outfit!
+      if (['hat', 'glasses', 'shirt'].every(c => [...worn].some(w => byId[w].cat === c))) TW.voice.praise({ queue: true });
       const r = pupBox.getBoundingClientRect();
       TW.fx.burst(r.left + r.width / 2, r.top + r.height * 0.4, { count: 10 });
     }
@@ -130,6 +137,7 @@
       worn.add(silly[i].id);
     }
     TW.sound.chime();
+    TW.voice.praise();
     const r = pupBox.getBoundingClientRect();
     TW.fx.burst(r.left + r.width / 2, r.top + r.height * 0.45, { count: 18 });
     render(true);

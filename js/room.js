@@ -66,6 +66,10 @@
         if (!it || !it.tap) return;
         e.preventDefault();
         it.tap(api, { x: e.clientX, y: e.clientY, g: g });
+        // Every prop answers: a sparkle where the finger landed, and a jiggle if the prop isn't already moving.
+        TW.fx.burst(e.clientX, e.clientY, { count: 5 });
+        const a = g.querySelector('.anim');
+        if (a && a.getAnimations && !a.getAnimations().length) TW.fx.bounce(a, 'jiggle');
       });
       window.addEventListener('resize', function () { if (el.classList.contains('active')) render(); });
       render();

@@ -4,6 +4,10 @@
   const COLORS = ['#FF4D4D', '#FF9F1C', '#FFD93D', '#4CC96B', '#3FA7FF', '#A86BFF', '#FF7AC6', '#9B5E35', '#333333'];
   const SIZES = [7, 16, 32];
   const STICKERS = ['sister', 'baby', 'mum', 'dad', 'heart'];
+  const NAMES = { '#FF4D4D': 'Red!', '#FF9F1C': 'Orange!', '#FFD93D': 'Yellow!', '#4CC96B': 'Green!', '#3FA7FF': 'Blue!',
+    '#A86BFF': 'Purple!', '#FF7AC6': 'Pink!', '#9B5E35': 'Brown!', '#333333': 'Black!' };
+  const TRAIL_EVERY = 70; // screen px of stroke between trail sparkles
+  let trail = 0;
 
   let el, wrap, canvas, ctx, toolbar, rect = null, dpr = 1, fitted = false;
   let color = COLORS[4], size = SIZES[1], mode = 'paint', sticker = null;
@@ -52,7 +56,7 @@
   function onTool(e) {
     const b = e.target.closest('button');
     if (!b) return;
-    if (b.dataset.color) { color = b.dataset.color; mode = 'paint'; TW.sound.pop(); }
+    if (b.dataset.color) { color = b.dataset.color; mode = 'paint'; TW.sound.pop(); TW.voice.say(NAMES[color]); }
     else if (b.dataset.size) { size = +b.dataset.size; if (mode === 'sticker') mode = 'paint'; TW.sound.pop(); }
     else if ('eraser' in b.dataset) { mode = 'erase'; TW.sound.pop(); }
     else if (b.dataset.sticker) { mode = 'sticker'; sticker = b.dataset.sticker; TW.sound.boing(); }
@@ -87,8 +91,14 @@
     const list = (e.getCoalescedEvents && e.getCoalescedEvents()) || [];
     const evs = list.length ? list : [e];
     let prev = last;
-    for (const ev of evs) { const p = pt(ev); draw(prev, p); prev = p; }
+    for (const ev of evs) {
+      const p = pt(ev);
+      draw(prev, p);
+      trail += Math.hypot(p.x - prev.x, p.y - prev.y) / dpr;
+      prev = p;
+    }
     strokes.set(e.pointerId, prev);
+    if (trail > TRAIL_EVERY && mode === 'paint') { trail = 0; TW.fx.twinkle(e.clientX, e.clientY, color); }
   }
 
   function up(e) { strokes.delete(e.pointerId); }

@@ -31,7 +31,7 @@ window.TW = window.TW || {};
     const parts = c.vb.split(' ');
     const wh = c.size ? ` width="${parts[2]}" height="${parts[3]}"` : '';
     const tx = 100 + br;
-    return `<svg ${NS} viewBox="${c.vb}"${wh}${c.ov ? ' overflow="visible"' : ''}>
+    return `<svg ${NS} viewBox="${c.vb}"${wh}${c.ov ? ' overflow="visible"' : ''}><g class="pup-bob" style="animation-delay:${idle()}">
 ${c.back}
 <g stroke="${O}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
 <path d="M${tx - 10} ${by + 8} Q${tx + 36} ${by - 6} ${tx + 30} ${by - 50} Q${tx + 20} ${by - 54} ${tx + 16} ${by - 44} Q${tx + 18} ${by - 14} ${tx - 14} ${by - 6} Z" fill="${c.ear}"/>
@@ -45,14 +45,15 @@ ${c.outfit}
 <ellipse cx="154" cy="94" rx="20" ry="40" fill="${c.ear}" transform="rotate(-18 154 94)"/>
 <ellipse cx="100" cy="112" rx="30" ry="22" fill="${c.belly}"/>
 </g>
-<circle cx="78" cy="84" r="8" fill="${O}"/><circle cx="81" cy="81" r="3" fill="#fff"/>
-<circle cx="122" cy="84" r="8" fill="${O}"/><circle cx="125" cy="81" r="3" fill="#fff"/>
+<g class="pup-eyes" style="animation-delay:${idle()}"><circle cx="78" cy="84" r="8" fill="${O}"/><circle cx="81" cy="81" r="3" fill="#fff"/>
+<circle cx="122" cy="84" r="8" fill="${O}"/><circle cx="125" cy="81" r="3" fill="#fff"/></g>
 <ellipse cx="100" cy="102" rx="11" ry="8" fill="${O}"/>
 <path d="M89 114 Q100 124 111 114" fill="none" stroke="${O}" stroke-width="3.5" stroke-linecap="round"/>
 <circle cx="66" cy="108" r="8" fill="${c.cheek}" opacity="${c.cheekOp}"/><circle cx="134" cy="108" r="8" fill="${c.cheek}" opacity="${c.cheekOp}"/>
 ${c.extra}
-</svg>`;
+</g></svg>`;
   }
+  function idle() { return (-Math.random() * 6).toFixed(2) + 's'; }
 
   function pup(name, opts) { return puppy(Object.assign({}, FAMILY[name], opts || {})); }
 
@@ -60,7 +61,7 @@ ${c.extra}
   function sisterDress() {
     const c = FAMILY.sister;
     const s = `stroke="${O}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"`;
-    return `<svg ${NS} viewBox="0 -50 300 490" width="300" height="490">
+    return `<svg ${NS} viewBox="0 -50 300 490" width="300" height="490"><g class="pup-bob">
 <g data-layer="back"></g>
 <g ${s}>
 <path d="M200 330 Q252 320 246 262 Q234 256 228 268 Q230 300 196 306 Z" fill="${c.ear}"/>
@@ -81,15 +82,15 @@ ${c.extra}
 <ellipse cx="226" cy="152" rx="26" ry="54" fill="${c.ear}" transform="rotate(-16 226 152)"/>
 <ellipse cx="150" cy="172" rx="40" ry="30" fill="${c.belly}"/>
 </g>
-<circle cx="122" cy="134" r="10" fill="${O}"/><circle cx="126" cy="130" r="3.5" fill="#fff"/>
-<circle cx="178" cy="134" r="10" fill="${O}"/><circle cx="182" cy="130" r="3.5" fill="#fff"/>
+<g class="pup-eyes"><circle cx="122" cy="134" r="10" fill="${O}"/><circle cx="126" cy="130" r="3.5" fill="#fff"/>
+<circle cx="178" cy="134" r="10" fill="${O}"/><circle cx="182" cy="130" r="3.5" fill="#fff"/></g>
 <ellipse cx="150" cy="158" rx="14" ry="10" fill="${O}"/>
 <path d="M134 176 Q150 192 166 176" fill="none" stroke="${O}" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="102" cy="172" r="11" fill="#FF8FA3" opacity=".55"/><circle cx="198" cy="172" r="11" fill="#FF8FA3" opacity=".55"/>
 <g data-layer="bow"><g transform="translate(100 70) rotate(-20) scale(1.4)"><path d="M0 0 L-20 -13 L-20 13 Z M0 0 L20 -13 L20 13 Z" fill="#FF6FA8" stroke="${O}" stroke-width="3" stroke-linejoin="round"/><circle r="6" fill="#FF3D8B" stroke="${O}" stroke-width="3"/></g></g>
 <g data-layer="face"></g>
 <g data-layer="top"></g>
-</svg>`;
+</g></svg>`;
   }
 
   function heartSvg(color) {
