@@ -4,7 +4,7 @@ TW.voice = (function () {
   const ok = 'speechSynthesis' in window && typeof window.SpeechSynthesisUtterance === 'function';
   const PRAISE = ['Well done!', 'Yay!', 'Wow!', 'Great job!', 'Hooray!'];
   const PREFER = ['Samantha', 'Karen', 'Moira', 'Tessa', 'Google US English', 'Microsoft Aria', 'Microsoft Jenny', 'Microsoft Zira'];
-  let voice = null, unlocked = false, praiseI = 0;
+  let voice = null, unlocked = false, praiseI = 0, said = 0;
 
   function pick() {
     let all = [];
@@ -20,6 +20,7 @@ TW.voice = (function () {
 
   function say(text, opt) {
     opt = opt || {};
+    said++;
     if (!ok || TW.sound.isMuted()) return;
     try {
       if (!opt.queue) speechSynthesis.cancel();
@@ -35,6 +36,7 @@ TW.voice = (function () {
   }
 
   return {
+    get count() { return said; },
     say: say,
     praise: function (opt) { say(PRAISE[praiseI++ % PRAISE.length], opt); },
     cancel: function () {

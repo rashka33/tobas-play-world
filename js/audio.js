@@ -130,8 +130,45 @@ TW.sound = (function () {
     setTimeout(function () { m.gain.disconnect(); }, 600);
   }
 
+  // A shaped synth voice for animal calls: pitch glide, optional wobble, a filter for colour.
+  function call(type, f0, f1, dur, o) {
+    o = o || {};
+    if (muted) return;
+    const c = ac(); if (!c) return;
+    const t = c.currentTime + (o.delay || 0);
+    const osc = c.createOscillator(), g = c.createGain(), f = c.createBiquadFilter();
+    osc.type = type;
+    osc.frequency.setValueAtTime(f0, t);
+    osc.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    if (o.vib) {
+      const l = c.createOscillator(), lg = c.createGain();
+      l.frequency.value = o.vib; lg.gain.value = o.depth || 20;
+      l.connect(lg); lg.connect(osc.frequency); l.start(t); l.stop(t + dur + 0.05);
+    }
+    f.type = o.ft || 'lowpass'; f.frequency.value = o.ff || 1200; f.Q.value = o.q || 1;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(o.vol || 0.25, t + (o.att || 0.05));
+    g.gain.setValueAtTime(o.vol || 0.25, t + dur * 0.7);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(f); f.connect(g); g.connect(master);
+    osc.start(t); osc.stop(t + dur + 0.05);
+  }
+  const ANIMALS = {
+    cow: function () { call('sawtooth', 150, 105, 1.1, { ff: 520, vib: 4, depth: 6, att: 0.15, vol: 0.3 }); },
+    sheep: function () { call('sawtooth', 420, 380, 0.8, { ff: 1800, vib: 9, depth: 40, att: 0.04, vol: 0.18 }); },
+    chicken: function () { [0, 0.11, 0.22, 0.42].forEach(function (d, i) { call('square', i === 3 ? 1100 : 900, 600, 0.08, { ff: 2400, vol: 0.12, att: 0.01, delay: d }); }); },
+    duck: function () { [0, 0.24].forEach(function (d) { call('square', 560, 380, 0.17, { ft: 'bandpass', ff: 1100, q: 3, vol: 0.3, att: 0.01, delay: d }); }); },
+    horse: function () { call('sawtooth', 950, 480, 1.0, { ff: 2200, vib: 11, depth: 70, att: 0.03, vol: 0.16 }); }
+  };
+
   return {
     unlock: function () { ac(); },
+    animal: function (k) { if (ANIMALS[k]) ANIMALS[k](); },
+    fanfare: function () {
+      [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.22, { type: 'triangle', vol: 0.14, delay: i * 0.11 }); });
+      [523, 659, 784].forEach(function (f) { tone(f * 2, 0.9, { type: 'triangle', vol: 0.07, delay: 0.5 }); });
+    },
+    drip: function () { tone(1200 + Math.random() * 400, 0.08, { to: 600, vol: 0.12 }); },
     musicStart: musicStart,
     musicStop: musicStop,
     musicPlaying: function () { return !!mus; },

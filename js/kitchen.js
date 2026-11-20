@@ -1,10 +1,12 @@
 // Scene 4: Kitchen — put toppings on a pizza, bake it, give it to baby pup.
 (function () {
   const A = TW.art, I = A.icons;
-  const TOPS = ['pepperoni', 'mushroom', 'olive', 'pepper', 'tomato', 'pineapple', 'basil', 'cheese'];
+  const TOPS = ['pepperoni', 'mushroom', 'olive', 'pepper', 'tomato', 'pineapple', 'basil', 'cheese', 'corn', 'onion', 'ham', 'sausage', 'broccoli', 'egg'];
+  const TOOLS = ['rollingpin', 'salt'];
   const MAX_TOPS = 90, RIM = 0.68;
   const SAY = { pepperoni: 'Pepperoni!', mushroom: 'Mushroom!', olive: 'Olive!', pepper: 'Green pepper!',
-    tomato: 'Tomato!', pineapple: 'Pineapple!', basil: 'Basil!', cheese: 'Cheese!' };
+    tomato: 'Tomato!', pineapple: 'Pineapple!', basil: 'Basil!', cheese: 'Cheese!', corn: 'Corn!', onion: 'Onion!',
+    ham: 'Ham!', sausage: 'Sausage!', broccoli: 'Broccoli!', egg: 'Egg!' };
 
   let el, cell, pizza, tops, pupEl, bins;
   let baked = false, baking = false, serving = false, drag = null, pz = null, offX = 0, offY = 0;
@@ -21,7 +23,7 @@
     <button class="rbtn new-btn" aria-label="New pizza">${I.newPizza}</button>
   </div>
 </div>
-<div class="toolbar bins">${TOPS.map(t => `<button class="tool bin" data-top="${t}" aria-label="${t}">${A.topping(t, true)}</button>`).join('')}</div>`;
+<div class="toolbar bins">${TOPS.concat(TOOLS).map(t => `<button class="tool bin${TOOLS.includes(t) ? ' kit' : ''}" data-top="${t}" aria-label="${t}">${A.topping(t, true)}</button>`).join('')}</div>`;
 
     cell = el.querySelector('.k-cell');
     pizza = el.querySelector('.pizza');
@@ -49,7 +51,8 @@
     pupEl.addEventListener('pointerdown', function () {
       if (baked && !serving && !baking) { serve(); return; }
       TW.sound.boing();
-      TW.fx.bounce(pupEl);
+      TW.voice.say(['I am hungry!', 'Pizza please!', 'Yum yum!'][Math.floor(Math.random() * 3)]);
+      TW.fx.bounce(pupEl, 'sqhop');
       const r = pupEl.getBoundingClientRect();
       TW.fx.hearts(r.left + r.width / 2, r.top + r.height * 0.2, 2);
     });
@@ -87,7 +90,8 @@
     if (!drag || e.pointerId !== drag.id) return;
     const d = drag;
     endDrag();
-    place(d.kind, e.clientX, e.clientY, d.moved);
+    if (TOOLS.includes(d.kind)) useTool(d.kind);
+    else place(d.kind, e.clientX, e.clientY, d.moved);
   }
   function moveGhost(x, y) { drag.g.style.left = x + 'px'; drag.g.style.top = y + 'px'; }
   function endDrag() { drag.g.remove(); drag.b.classList.remove('held'); drag = null; }
@@ -115,9 +119,23 @@
       addTop(kind, px, py);
     }
     el.classList.add('has-tops');
+    TW.fx.bounce(pupEl, 'sqhop');
     TW.sound.pop();
     TW.voice.say(SAY[kind]);
     TW.fx.burst(r.left + R + nx * R, r.top + R + ny * R, { count: 4 });
+  }
+
+  function useTool(kind) {
+    const c = TW.fx.center(pizza);
+    if (kind === 'rollingpin') {
+      TW.fx.bounce(el.querySelector('.pz'), 'rolled');
+      TW.sound.swish(); TW.voice.say('Rolling pin! Roll roll!');
+    } else {
+      for (let i = 0; i < 4; i++) setTimeout(function () { TW.sound.drip(); }, i * 110);
+      TW.fx.burst(c.x, c.y - 20, { count: 12, colors: ['#FFFFFF', '#EEEEEE', '#DDDDDD'] });
+      TW.voice.say('Salt! Shake shake!');
+    }
+    TW.fx.bounce(pupEl, 'sqhop');
   }
 
   function addTop(kind, nx, ny) {
@@ -196,7 +214,7 @@
       TW.fx.bounce(pupEl, 'happy');
       const r = pupEl.getBoundingClientRect();
       TW.fx.hearts(r.left + r.width / 2, r.top + r.height * 0.25, 9);
-      setTimeout(function () { TW.sound.chime(); TW.voice.praise(); }, 450);
+      setTimeout(function () { TW.celebrate('Yummy pizza!'); }, 450);
     }, 760);
     setTimeout(resetPizza, 2400);
   }

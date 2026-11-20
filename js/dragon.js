@@ -23,6 +23,10 @@
   const DAISIES =`<path d="M0 50 L-14 -6 M0 50 L0 -16 M0 50 L14 -4" stroke="#3DAA5C" stroke-width="6" stroke-linecap="round"/>
 ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a => `<ellipse cx="${(p[0] + Math.cos(a * Math.PI / 180) * 11).toFixed(1)}" cy="${(p[1] + Math.sin(a * Math.PI / 180) * 11).toFixed(1)}" rx="7" ry="5" fill="#fff" stroke="${O}" stroke-width="2" transform="rotate(${a} ${(p[0] + Math.cos(a * Math.PI / 180) * 11).toFixed(1)} ${(p[1] + Math.sin(a * Math.PI / 180) * 11).toFixed(1)})"/>`).join('') + `<circle cx="${p[0]}" cy="${p[1]}" r="6" fill="#FFD23F" stroke="${O}" stroke-width="2"/>`).join('')}
 <path d="M-10 30 L10 30 L0 40 Z" fill="#FF6FA8" ${st}/>`;
+  function butterfly(c, d) {
+    return `<g class="flutter" style="animation-delay:${d}s"><g class="wings-flap"><g class="bw"><ellipse cx="-16" cy="-6" rx="16" ry="20" fill="${c}" ${st}/><ellipse cx="16" cy="-6" rx="16" ry="20" fill="${c}" ${st}/></g></g>
+<ellipse cy="0" rx="5" ry="18" fill="${O}"/><path d="M-3 -16 L-10 -28 M3 -16 L10 -28" stroke="${O}" stroke-width="2.5" stroke-linecap="round"/></g>`;
+  }
   const SHIELD_PATH = 'M-50 -60 H50 V0 Q50 50 0 76 Q-50 50 -50 0 Z';
   const FLOWER_COLORS = ['#FF6FA8', '#FFD23F', '#B57CFF', '#FF7A59', '#3FA7FF'];
 
@@ -39,17 +43,39 @@ ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a =>
   function flowerItem(i, L, P) {
     const id = 'flower' + i;
     return { id: id, pos: { L: L, P: P }, hit: [110, 120], hitDy: 6,
+      say: api => api.state.open[i] ? ['Pink flower!', 'Yellow flower!', 'Purple flower!', 'Orange flower!', 'Blue flower!'][i] : 'Sleepy flower!',
       draw: api => flower(api.state.open[i], FLOWER_COLORS[i]),
       tap: function (api) {
-        api.state.open[i] = !api.state.open[i];
+        const s = api.state;
+        s.open[i] = !s.open[i];
         api.redraw(id); api.play(id, 'pop');
-        if (api.state.open[i]) { TW.sound.chime(); const c = api.center(id); TW.fx.burst(c.x, c.y, { count: 6 }); }
-        else TW.sound.plop();
+        walkPup(api, id);
+        if (s.open[i]) { TW.sound.chime(); const c = api.center(id); TW.fx.burst(c.x, c.y, { count: 6 }); }
+        else { TW.sound.plop(); s.allBloomed = false; }
+        if (s.open.every(Boolean) && !s.allBloomed) {
+          s.allBloomed = true;
+          api.later(function () { TW.celebrate('All the flowers bloomed!'); flyLoop(api); api.play('pup', 'sqhop'); }, 600);
+        }
       } };
   }
 
-  // Where the crown/daisies sit, worked out from the pup's and dragon's positions.
-  function pupP(L) { return L === 'L' ? [300, 370, 1.2] : [160, 560, 1.15]; }
+  // Where the crown/daisies sit, worked out from the pup's (possibly walked) and dragon's positions.
+  function pupP(L, api) { return api ? api.pos('pup') : (L === 'L' ? [300, 370, 1.2] : [160, 560, 1.15]); }
+  function walkPup(api, id) {
+    const t = api.pos(id), p = api.pos('pup'), L = api.layout();
+    const side = t[0] < p[0] ? 1 : -1;
+    let x = t[0] + side * (L === 'L' ? 110 : 90);
+    x = Math.max(L === 'L' ? 130 : 110, Math.min(L === 'L' ? 370 : 230, x));
+    const deps = [];
+    if (api.state.crownOn === 'pup') deps.push('crown');
+    if (api.state.holding) deps.push('daisies');
+    if (Math.abs(x - p[0]) > 20) api.walk('pup', x, null, deps, 1100);
+  }
+  // A slow loop around the meadow (only when the crown isn't riding on the dragon's head).
+  function flyLoop(api) {
+    if (api.state.crownOn === 'dragon') { api.play('dragon', 'flap'); return; }
+    api.play('dragon', 'flyloop'); TW.sound.whoosh();
+  }
   function dragonP(L) { return L === 'L' ? [670, 300, 1] : [430, 470, 0.85]; }
 
   function bg(L) {
@@ -67,11 +93,14 @@ ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a =>
     state: { crownOn: 'pup', holding: false, open: [false, false, false, false, false] },
     // Every so often the dragon gives a happy flap all by itself.
     init: function (api) {
+      let n = 0;
       (function loop() {
         setTimeout(function () {
-          if (api.el().classList.contains('active')) api.play('dragon', 'flap');
+          if (api.active() && !api.anim('dragon').classList.contains('flyloop')) {
+            if (++n % 2 === 0) flyLoop(api); else api.play('dragon', 'flap');
+          }
           loop();
-        }, 5000 + Math.random() * 4000);
+        }, 5000 + Math.random() * 3000);
       })();
     },
     bg: bg,
@@ -85,13 +114,17 @@ ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a =>
         draw: `<path d="${SHIELD_PATH}" fill="#5B8DEF" stroke="#F2C14E" stroke-width="10" stroke-linejoin="round"/><path d="${SHIELD_PATH}" fill="none" ${st}/>
 <path d="M0 34 C-24 16 -28 -6 -14 -14 C-6 -18 -2 -12 0 -8 C2 -12 6 -18 14 -14 C28 -6 24 16 0 34 Z" fill="#FF6FA8" ${st}/>
 <g clip-path="url(#shieldClip)"><rect class="shine" x="-14" y="-110" width="28" height="220" fill="#fff" opacity=".85"/></g>`,
+        say: 'Shiny shield!',
         tap: function (api) {
           api.play('shield', 'shining'); TW.sound.sparkle();
           const c = api.center('shield'); TW.fx.burst(c.x, c.y, { count: 10, colors: ['#FFFFFF', '#FFF3B0', '#9FD8FF'] });
         } },
       { id: 'dragon', pos: { L: dragonP('L'), P: dragonP('P') }, hit: [260, 290], hitDy: 4,
         draw: DRAGON,
+        say: 'Dragon friend!',
         tap: function (api) {
+          if (api.anim('dragon').classList.contains('flyloop')) return;
+          flyLoop(api);
           api.play('dragon', 'flap');
           TW.sound.whoosh(); setTimeout(TW.sound.chime, 350);
           const m = api.local('dragon', 0, -26);
@@ -99,13 +132,14 @@ ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a =>
         } },
       { id: 'pup', pos: { L: pupP('L'), P: pupP('P') }, hit: [200, 240], hitDy: 10,
         draw: TW.pupAt('dad', { back: CAPE, outfit: TUNIC, extra: A.parts.BROWS }),
-        tap: function (api) { TW.sound.boing(); api.play('pup', 'bounce'); } },
+        say: 'I am a prince!',
+        tap: function (api) { TW.sound.boing(); api.play('pup', 'sqhop'); } },
       { id: 'crown', hit: [150, 140], hitDy: -24,
         pos: function (L, api) {
-          if (api.state.crownOn === 'pup') { const p = pupP(L); return [p[0], p[1] + (42 - 120) * p[2], p[2] * 0.85]; }
+          if (api.state.crownOn === 'pup') { const p = pupP(L, api); return [p[0], p[1] + (42 - 120) * p[2], p[2] * 0.85]; }
           const d = dragonP(L); return [d[0], d[1] - 108 * d[2], d[2] * 0.95];
         },
-        draw: CROWN,
+        draw: CROWN, say: api => api.state.crownOn === 'pup' ? 'Crown for the prince!' : 'Crown for the dragon!',
         tap: function (api) {
           api.state.crownOn = api.state.crownOn === 'pup' ? 'dragon' : 'pup';
           api.place('crown'); api.play('crown', 'hop'); TW.sound.boing();
@@ -117,9 +151,9 @@ ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a =>
       { id: 'daisies', hit: [110, 130],
         pos: function (L, api) {
           if (!api.state.holding) return L === 'L' ? [440, 540, 1] : [300, 760, 1];
-          const p = pupP(L); return [p[0] + 52 * p[2], p[1] + 58 * p[2], p[2] * 0.8];
+          const p = pupP(L, api); return [p[0] + 52 * p[2], p[1] + 58 * p[2], p[2] * 0.8];
         },
-        draw: DAISIES,
+        draw: DAISIES, say: 'Daisies!',
         tap: function (api) {
           api.state.holding = !api.state.holding;
           api.place('daisies'); api.play('daisies', 'pop');
@@ -127,7 +161,27 @@ ${[[-14, -10], [0, -22], [14, -8]].map(p => [0, 60, 120, 180, 240, 300].map(a =>
             TW.sound.chime();
             setTimeout(function () { const c = api.center('pup'); TW.fx.hearts(c.x, c.y - 40, 7); api.play('pup', 'bounce'); }, 400);
           } else TW.sound.plop();
-        } }
+        } },
+      { id: 'sun', pos: { L: [880, 90, 1], P: [510, 100, 1] }, hit: [130, 130], say: 'Sunshine!',
+        draw: `<g class="sweep">${[0, 45, 90, 135, 180, 225, 270, 315].map(a => `<path d="M${(Math.cos(a * Math.PI / 180) * 46).toFixed(1)} ${(Math.sin(a * Math.PI / 180) * 46).toFixed(1)} L${(Math.cos(a * Math.PI / 180) * 62).toFixed(1)} ${(Math.sin(a * Math.PI / 180) * 62).toFixed(1)}" stroke="#FFC24B" stroke-width="8" stroke-linecap="round"/>`).join('')}</g>
+<circle r="38" fill="#FFD93D" ${st}/><circle cx="-12" cy="-6" r="4" fill="${O}"/><circle cx="12" cy="-6" r="4" fill="${O}"/><path d="M-12 8 Q0 18 12 8" fill="none" stroke="${O}" stroke-width="3.5" stroke-linecap="round"/>`,
+        tap: function (api) { api.play('sun', 'wigspin'); TW.sound.chime(); } },
+      { id: 'cloud', pos: { L: [560, 90, 1], P: [300, 120, 1] }, hit: [140, 112], say: 'Pitter patter, rain!',
+        draw: `<path d="M-50 20 Q-70 20 -66 0 Q-64 -18 -44 -16 Q-36 -40 -10 -36 Q8 -52 30 -34 Q56 -36 58 -12 Q74 -6 66 12 Q62 22 48 20 Z" fill="#fff" ${st}/>`,
+        tap: function (api) { api.play('cloud', 'wiggle'); const p = api.local('cloud', 0, 24); TW.fx.drops(p.x, p.y, 10); [0, 120, 240, 360].forEach(function (d) { setTimeout(TW.sound.drip, d); }); } },
+      { id: 'castle', pos: { L: [900, 300, 1], P: [520, 280, 1] }, hit: [120, 120], say: 'A castle! Toot toot!',
+        draw: `<rect x="-44" y="-20" width="88" height="62" fill="#E6E0F5" ${st}/><rect x="-54" y="-44" width="26" height="86" fill="#D6CCEE" ${st}/><rect x="28" y="-44" width="26" height="86" fill="#D6CCEE" ${st}/>
+<path d="M-58 -44 L-41 -70 L-24 -44 Z M24 -44 L41 -70 L58 -44 Z" fill="#FF6FA8" ${st}/><path d="M-12 42 V14 Q0 2 12 14 V42 Z" fill="#B57CFF" ${st}/>
+<path d="M41 -70 V-92" stroke="${O}" stroke-width="3"/><g class="flagwave"><path d="M41 -92 L64 -86 L41 -80 Z" fill="#FFD93D" ${st}/></g>`,
+        tap: function (api) { api.play(api.anim('castle').querySelector('.flagwave'), 'wiggle'); [659, 784, 1047].forEach(function (f, i) { setTimeout(function () { TW.sound.beep(f); }, i * 140); }); } },
+      { id: 'bunny', pos: { L: [480, 410, 1], P: [410, 690, 1] }, hit: [110, 110], say: 'Peekaboo, bunny!',
+        draw: `<g class="peek"><ellipse cx="-10" cy="-38" rx="7" ry="20" fill="#fff" ${st}/><ellipse cx="10" cy="-38" rx="7" ry="20" fill="#fff" ${st}/><circle cy="-12" r="20" fill="#fff" ${st}/><circle cx="-7" cy="-14" r="3" fill="${O}"/><circle cx="7" cy="-14" r="3" fill="${O}"/><circle cy="-6" r="3" fill="#FF8FA3"/></g>
+<path d="M-50 30 Q-56 0 -30 -4 Q-20 -24 0 -14 Q20 -26 32 -4 Q58 0 50 30 Z" fill="#4CC96B" ${st}/>`,
+        tap: function (api) { api.play(api.anim('bunny').querySelector('.peek'), 'peekup'); TW.sound.boing(); } },
+      { id: 'fly1', pos: { L: [230, 200, 1], P: [100, 330, 1] }, hit: [112, 112], say: 'Butterfly!',
+        draw: butterfly('#FF9CD0', 0), tap: function (api) { api.play('fly1', 'wigspin'); TW.sound.sparkle(); } },
+      { id: 'fly2', pos: { L: [880, 440, 1], P: [330, 250, 1] }, hit: [112, 112], say: 'Butterfly!',
+        draw: butterfly('#9FD8FF', -2), tap: function (api) { api.play('fly2', 'wigspin'); TW.sound.sparkle(); } }
     ]
   });
 })();

@@ -76,6 +76,8 @@ ${c.extra}
 <ellipse cx="220" cy="292" rx="18" ry="46" fill="${c.body}" transform="rotate(-18 220 292)"/>
 </g>
 <g data-layer="waist"></g>
+<g data-layer="feet"></g>
+<g data-layer="hand"></g>
 <g ${s}>
 <circle cx="150" cy="140" r="80" fill="${c.body}"/>
 <ellipse cx="74" cy="152" rx="26" ry="54" fill="${c.ear}" transform="rotate(16 74 152)"/>
@@ -139,6 +141,14 @@ ${c.extra}
     pineapple: `<path d="M6 31 L20 7 L34 31 Z" fill="#FFD93D" stroke="#C99A00" stroke-width="2.5" stroke-linejoin="round"/><path d="M13 25 L20 15 L27 25" fill="none" stroke="#E8B400" stroke-width="2"/>`,
     basil: `<path d="M6 32 Q6 8 34 8 Q34 32 6 32 Z" fill="#3DAA5C" stroke="#226B37" stroke-width="2.5" stroke-linejoin="round"/><path d="M8 30 Q20 21 30 11" fill="none" stroke="#226B37" stroke-width="2"/>`,
     cheese: `<rect x="4" y="15" width="32" height="10" rx="5" fill="#FFE066" stroke="#E0B000" stroke-width="2"/>`,
+    corn: `<g fill="#FFD23F" stroke="#D9A600" stroke-width="2"><circle cx="14" cy="16" r="6"/><circle cx="26" cy="16" r="6"/><circle cx="20" cy="26" r="6"/></g>`,
+    onion: `<circle cx="20" cy="20" r="14" fill="none" stroke="#C9A8FF" stroke-width="5"/><circle cx="20" cy="20" r="7" fill="none" stroke="#E6D6FF" stroke-width="3"/>`,
+    ham: `<path d="M6 10 H34 L30 32 H10 Z" fill="#FF9CB0" stroke="#D9667E" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 16 Q20 22 28 16" fill="none" stroke="#FFD6DE" stroke-width="3"/>`,
+    sausage: `<circle cx="20" cy="20" r="14" fill="#B5543A" stroke="#7E3422" stroke-width="2.5"/><circle cx="15" cy="16" r="2.5" fill="#E8A07E"/><circle cx="25" cy="23" r="2.5" fill="#E8A07E"/>`,
+    broccoli: `<path d="M17 36 L19 22 H23 L25 36 Z" fill="#8CD27A" stroke="#3E8E37" stroke-width="2"/><g fill="#3FA34D" stroke="#2A6E33" stroke-width="2"><circle cx="13" cy="17" r="8"/><circle cx="27" cy="17" r="8"/><circle cx="20" cy="10" r="8"/></g>`,
+    egg: `<path d="M20 4 Q34 6 34 20 Q34 36 20 36 Q6 36 6 20 Q6 6 20 4 Z" fill="#FFFFFF" stroke="#C9C2B0" stroke-width="2.5"/><circle cx="20" cy="21" r="8" fill="#FFC23D" stroke="#E8A000" stroke-width="2"/>`,
+    rollingpin: `<rect x="4" y="15" width="32" height="12" rx="6" fill="#E8C08A" stroke="#9C6B33" stroke-width="2.5"/><rect x="0" y="18" width="6" height="6" rx="3" fill="#B5733F"/><rect x="34" y="18" width="6" height="6" rx="3" fill="#B5733F"/>`,
+    salt: `<path d="M12 14 H28 L30 36 H10 Z" fill="#FFFFFF" stroke="#7C8796" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 14 Q20 2 28 14 Z" fill="#C9CED6" stroke="#7C8796" stroke-width="2.5"/><circle cx="17" cy="9" r="1.5" fill="#7C8796"/><circle cx="23" cy="9" r="1.5" fill="#7C8796"/>`,
     cheeseBin: `<path d="M3 32 L37 32 L37 13 Z" fill="#FFE066" stroke="#D9A600" stroke-width="2.5" stroke-linejoin="round"/><path d="M3 32 L37 13 L37 9 L3 28 Z" fill="#FFF0A0" stroke="#D9A600" stroke-width="2.5" stroke-linejoin="round"/><circle cx="27" cy="25" r="3" fill="#F2C200"/><circle cx="18" cy="29" r="2" fill="#F2C200"/>`
   };
   function topping(kind, bin) {

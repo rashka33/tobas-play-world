@@ -91,6 +91,39 @@ window.TW = window.TW || {};
       ], { duration: 700, easing: 'ease-out' });
       a.onfinish = function () { d.remove(); };
     },
+    // Confetti showering down the whole screen.
+    confetti: function (n) {
+      n = n || 70;
+      const cols = ['#FF5A7A', '#FFD93D', '#3FA7FF', '#4CC96B', '#A86BFF', '#FF9F1C', '#FF7AC6'];
+      const W = window.innerWidth, H = window.innerHeight;
+      for (let i = 0; i < n; i++) {
+        const d = spawn('confetti', '', Math.random() * W, -20);
+        d.style.background = cols[i % cols.length];
+        if (i % 3 === 0) d.style.borderRadius = '50%';
+        if (!d.animate) { d.remove(); continue; }
+        const dx = (Math.random() - 0.5) * 220, rot = (Math.random() - 0.5) * 1080;
+        const a = d.animate([
+          { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+          { transform: `translate(${dx * 0.5}px,${H * 0.55}px) rotate(${rot * 0.5}deg)`, opacity: 1, offset: 0.55 },
+          { transform: `translate(${dx}px,${H + 60}px) rotate(${rot}deg)`, opacity: 0.9 }
+        ], { duration: 1800 + Math.random() * 1400, delay: Math.random() * 500, easing: 'ease-in', fill: 'backwards' });
+        a.onfinish = function () { d.remove(); };
+      }
+    },
+    // Water drops falling from a point (watering can, sink tap).
+    drops: function (x, y, n) {
+      n = n || 8;
+      for (let i = 0; i < n; i++) {
+        const d = spawn('drop', '<svg viewBox="0 0 20 28"><path d="M10 2 Q18 16 16 20 A6 6 0 0 1 4 20 Q2 16 10 2 Z" fill="#7FD0FF" stroke="#2F8FE8" stroke-width="2"/></svg>', x + (Math.random() - 0.5) * 40, y);
+        if (!d.animate) { d.remove(); continue; }
+        const a = d.animate([
+          { transform: 'translate(0,0) scale(.6)', opacity: 0 },
+          { transform: 'translate(0,10px) scale(1)', opacity: 1, offset: 0.15 },
+          { transform: `translate(${(Math.random() - 0.5) * 20}px,${80 + Math.random() * 50}px) scale(1)`, opacity: 0 }
+        ], { duration: 600 + Math.random() * 300, delay: i * 90, easing: 'ease-in', fill: 'backwards' });
+        a.onfinish = function () { d.remove(); };
+      }
+    },
     // Restart a one-shot CSS animation class.
     bounce: function (el, cls) {
       cls = cls || 'bounce';
@@ -109,3 +142,11 @@ window.TW = window.TW || {};
     }
   };
 })();
+
+// The big moment when a scene's main activity is done: confetti, a fanfare, and a cheer.
+TW.celebrate = function (line) {
+  TW.fx.confetti(80);
+  TW.sound.fanfare();
+  if (line) { TW.voice.say(line); TW.voice.praise({ queue: true }); }
+  else TW.voice.praise();
+};
