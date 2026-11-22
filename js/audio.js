@@ -168,6 +168,7 @@ TW.sound = (function () {
       [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.22, { type: 'triangle', vol: 0.14, delay: i * 0.11 }); });
       [523, 659, 784].forEach(function (f) { tone(f * 2, 0.9, { type: 'triangle', vol: 0.07, delay: 0.5 }); });
     },
+    tink: function () { tone(1700 + Math.random() * 900, 0.14, { type: 'triangle', vol: 0.045 }); },
     drip: function () { tone(1200 + Math.random() * 400, 0.08, { to: 600, vol: 0.12 }); },
     musicStart: musicStart,
     musicStop: musicStop,
