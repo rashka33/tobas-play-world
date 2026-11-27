@@ -23,7 +23,7 @@
     el.innerHTML = `<button class="rbtn back corner" data-back aria-label="Back to home">${I.back}</button>
 <div class="k-main">
   <div class="k-pup"><div class="k-pupwrap">${A.pup('baby')}</div></div>
-  <div class="k-cell"><div class="pizza"><div class="pz">${PIZZA_IMG}<div class="tops"></div><div class="steam"><span></span><span></span><span></span></div><div class="oven"><div class="glow"></div>${A.ovenSvg}</div></div></div></div>
+  <div class="k-cell"><div class="pizza"><div class="pz">${PIZZA_IMG}<div class="tops"></div><div class="steam"><span></span><span></span><span></span><span></span><span></span></div><div class="oven"><div class="glow"></div>${A.ovenSvg}</div></div></div></div>
   <div class="k-btns">
     <button class="rbtn big oven-btn" aria-label="Bake in the oven">${I.oven}</button>
     <button class="rbtn big serve-btn" aria-label="Give the pizza to baby pup">${I.serve}</button>
@@ -126,6 +126,7 @@
       addTop(kind, px, py);
     }
     el.classList.add('has-tops');
+    TW.fx.bounce(el.querySelector('.pz'), 'pzland');
     TW.fx.bounce(pupEl, 'sqhop');
     TW.sound.pop();
     TW.voice.say(SAY[kind]);
