@@ -500,3 +500,71 @@ img { -webkit-user-drag: none; pointer-events: none; }
 .bub-pup { position: absolute; left: 6px; bottom: 0; width: 118px; z-index: 6; pointer-events: none; transform-origin: 50% 100%; }
 .bub-pup svg { width: 100%; height: auto; }
 .bub-pup.sqhop { animation: sqhop .6s cubic-bezier(.3,.7,.4,1); }
+
+/* ---------- Stage 2 (Nov 27): opening, village home, growing world, guide, credits ---------- */
+/* Opening splash: sun rises, the cat trots in and waves, title bounces in, path lights up. Tap to skip. */
+#opening { position: fixed; inset: 0; z-index: 2000; overflow: hidden; cursor: pointer;
+  background: linear-gradient(#5BBEFF 0%, #A9E0FF 55%, #D6F2FF 100%); transition: opacity .4s ease; }
+#opening.done { opacity: 0; pointer-events: none; }
+.op-sun { position: absolute; left: 6vmin; bottom: 25vmin; width: 17vmin; height: 17vmin; border-radius: 50%; background: #FFD93D;
+  box-shadow: 0 0 0 2.2vmin rgba(255,217,61,.35), 0 0 0 4.6vmin rgba(255,217,61,.18); animation: opSun 2.6s ease-out both; }
+@keyframes opSun { from { transform: translateY(46vmin) scale(.8); opacity: .4; } to { transform: none; opacity: 1; } }
+.op-hills { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 42vmin; }
+.op-cat { position: absolute; bottom: 9vmin; left: 0; width: 34vmin; height: 34vmin; object-fit: contain; z-index: 3;
+  animation: opTrot 1.5s cubic-bezier(.3,.8,.4,1) both; }
+@keyframes opTrot {
+  0% { transform: translate(-38vmin, 0) rotate(-3deg); }
+  30% { transform: translate(-16vmin, -3.2vmin) rotate(2deg); }
+  55% { transform: translate(-4vmin, 0) rotate(-2deg); }
+  78% { transform: translate(6vmin, -2.4vmin) rotate(2deg); }
+  100% { transform: translate(10vmin, 0); }
+}
+.op-title { position: absolute; left: 0; right: 0; top: 13vmin; text-align: center; z-index: 4; padding: 0 12px;
+  font-size: clamp(34px, 9vmin, 96px); font-weight: 900; letter-spacing: .02em; color: #FF5A7A;
+  text-shadow: 0 3px 0 #fff, 3px 0 0 #fff, -3px 0 0 #fff, 0 -3px 0 #fff, 2px 2px 0 #fff, -2px 2px 0 #fff, 2px -2px 0 #fff, -2px -2px 0 #fff, 0 8px 0 rgba(0,0,0,.13);
+  animation: opTitle 3.6s cubic-bezier(.3,1.5,.5,1) both; }
+@keyframes opTitle {
+  0%, 38% { transform: translateY(-46vmin) scale(.5); opacity: 0; }
+  52% { transform: translateY(0) scale(1.12); opacity: 1; }
+  60% { transform: scale(.95); } 68% { transform: scale(1.05); } 76%, 100% { transform: scale(1); opacity: 1; }
+}
+.op-dots { position: absolute; left: 0; right: 0; bottom: 5.5vmin; display: flex; justify-content: center; gap: 7vmin; z-index: 2; }
+.op-dots span { width: 4.6vmin; height: 4.6vmin; border-radius: 50%; background: #E9DFC9; border: 3px solid rgba(74,46,28,.35); animation: opLight .5s ease-out both; }
+.op-dots span:nth-child(1) { animation-delay: 2.5s; } .op-dots span:nth-child(2) { animation-delay: 2.68s; }
+.op-dots span:nth-child(3) { animation-delay: 2.86s; } .op-dots span:nth-child(4) { animation-delay: 3.04s; }
+.op-dots span:nth-child(5) { animation-delay: 3.22s; }
+@keyframes opLight { from { background: #E9DFC9; transform: scale(.8); } to { background: #FFD93D; transform: scale(1.12); box-shadow: 0 0 18px 5px rgba(255,217,61,.75); } }
+.op-sparkles span { position: absolute; width: 34px; height: 34px; z-index: 5; opacity: 0; animation: opTwinkle .8s ease-in-out both; }
+.op-sparkles span svg { width: 100%; height: 100%; }
+@keyframes opTwinkle { 0% { opacity: 0; transform: scale(.2) rotate(0); } 45% { opacity: 1; transform: scale(1.15) rotate(50deg); } 100% { opacity: 0; transform: scale(.4) rotate(110deg); } }
+
+/* Village path home: a side-scrolling Somali village; stones are the same hub buttons. */
+.credits-btn { position: absolute; left: calc(12px + env(safe-area-inset-left)); bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 6;
+  width: 56px; height: 56px; font-size: 28px; font-weight: 900; color: #2F8FE8; opacity: .92; }
+.hub-scroll.village-scroll { overflow-x: auto; overflow-y: hidden; touch-action: pan-x; display: block; }
+.village-world { position: relative; width: 300%; min-width: 1080px; height: 100%; }
+.village-bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.village-grown { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.grown-item { position: absolute; transform: translate(-50%, -88%); pointer-events: none; }
+.grown-item svg { width: 100%; height: 100%; }
+.grown-item.drop-in { animation: dropin .6s cubic-bezier(.3,1.4,.5,1); }
+.hub-grid.village-stones { position: absolute; inset: 0; display: block; max-width: none; margin: 0; padding: 0; z-index: 3; }
+.hub-grid.village-stones .hub-btn.stone-btn { position: absolute; width: clamp(84px, 15.5vmin, 132px); height: clamp(84px, 15.5vmin, 132px);
+  transform: translate(-50%, -50%); }
+.village-cat { position: absolute; width: clamp(92px, 17vmin, 150px); height: auto; z-index: 4; pointer-events: none;
+  transform: translate(-50%, -96%); animation: villageCatBob 2.2s ease-in-out infinite; }
+@keyframes villageCatBob { 0%, 100% { margin-top: 0; } 50% { margin-top: -8px; } }
+
+/* The cat guide inside games: points at the first thing to tap, gone at first play. */
+#cat-guide { position: fixed; z-index: 900; pointer-events: none; animation: guidePoint 0.9s ease-in-out infinite; filter: drop-shadow(0 6px 6px rgba(0,0,0,.25)); }
+@keyframes guidePoint { 0%, 100% { transform: translateX(0) rotate(-2deg); } 50% { transform: translateX(9px) rotate(2deg); } }
+
+/* Credits */
+#credits { background: linear-gradient(#5BBEFF, #A9E0FF 60%, #D6F2FF); align-items: center; justify-content: center; }
+.credits-card { background: #FFF9EE; border-radius: 28px; box-shadow: 0 10px 0 rgba(0,0,0,.10); max-width: min(680px, 92vw);
+  max-height: 82vh; overflow-y: auto; touch-action: pan-y; padding: 26px 28px; margin: 84px 12px 20px; color: #4a2e1c; }
+.credits-card h2 { margin: 0 0 8px; font-size: 30px; }
+.credits-card h3 { margin: 18px 0 6px; font-size: 21px; }
+.credits-card p { margin: 0 0 10px; font-size: 16.5px; line-height: 1.45; }
+.credits-card .credit-line { background: #fff; border: 2px solid #F0E2C8; border-radius: 14px; padding: 10px 12px; overflow-wrap: anywhere; }
+.credits-card .credits-note { opacity: .75; font-size: 14.5px; }
