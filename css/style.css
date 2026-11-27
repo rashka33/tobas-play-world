@@ -559,6 +559,13 @@ img { -webkit-user-drag: none; pointer-events: none; }
 #cat-guide { position: fixed; z-index: 900; pointer-events: none; animation: guidePoint 0.9s ease-in-out infinite; filter: drop-shadow(0 6px 6px rgba(0,0,0,.25)); }
 @keyframes guidePoint { 0%, 100% { transform: translateX(0) rotate(-2deg); } 50% { transform: translateX(9px) rotate(2deg); } }
 
+/* Stage 3: the 3D room */
+#room3d { background: #FDF3DC; }
+.room3d-wrap { position: absolute; inset: 0; overflow: hidden; }
+.room3d-wrap canvas { display: block; touch-action: none; }
+.room3d-fallback { position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.room3d-card { background: #fff; border: 3px solid #4a2e1c; border-radius: 22px; padding: 22px 26px; font-size: 21px; line-height: 1.45; text-align: center; color: #4a2e1c; max-width: 330px; box-shadow: 0 8px 0 rgba(0,0,0,.12); }
+
 /* Credits */
 #credits { background: linear-gradient(#5BBEFF, #A9E0FF 60%, #D6F2FF); align-items: center; justify-content: center; }
 .credits-card { background: #FFF9EE; border-radius: 28px; box-shadow: 0 10px 0 rgba(0,0,0,.10); max-width: min(680px, 92vw);

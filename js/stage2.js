@@ -7,7 +7,7 @@ window.TW = window.TW || {};
   const O = '#4a2e1c';
   const CAT = 'assets/cat/';
 
-  // The 15 games, in hub order, each with its stepping-stone spot (% of world).
+  // The 16 games, in hub order, each with its stepping-stone spot (% of world).
   const STONES = [
     { scene: 'paint', x: 5, y: 64 }, { scene: 'coloring', x: 12, y: 76 },
     { scene: 'dressup', x: 19, y: 62 }, { scene: 'kitchen', x: 26, y: 75 },
@@ -16,7 +16,7 @@ window.TW = window.TW || {};
     { scene: 'dragon', x: 61, y: 58 }, { scene: 'animals', x: 68, y: 70 },
     { scene: 'whosays', x: 75, y: 57 }, { scene: 'bubbles', x: 82, y: 69 },
     { scene: 'sorting', x: 88, y: 57 }, { scene: 'helper', x: 93, y: 68 },
-    { scene: 'glow', x: 97, y: 56 }
+    { scene: 'glow', x: 97, y: 56 }, { scene: 'room3d', x: 98.5, y: 70 }
   ];
   const W = 3000, H = 700; // village viewBox
 
