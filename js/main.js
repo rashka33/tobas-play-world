@@ -7,6 +7,7 @@ window.TW = window.TW || {};
     paint: "Let's paint!", coloring: 'Pick a color!', dressup: 'Dress up time!', kitchen: "Let's make pizza!",
     wizard: 'Magic time!', space: 'Blast off!', vanity: 'So pretty!', lab: "Let's mix!", dragon: 'A dragon friend!',
     animals: 'Hello, animal friends!', sorting: "Let's sort!", helper: "Let's help Mummy!",
+    whosays: 'Hello, animals!', bubbles: 'Bubbles!',
     glow: 'Glow drawing! Draw with light!'
   };
   TW.current = function () { return current; };
