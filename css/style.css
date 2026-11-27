@@ -438,3 +438,10 @@ img { -webkit-user-drag: none; pointer-events: none; }
 @media (max-height: 520px) and (orientation: landscape) { .pen { height: 76px; } .pen svg { height: 76px; } .pen-bar { padding-top: 10px; } .dance-btn { width: 92px; height: 92px; } }
 /* short landscape phones: keep the 7-circle row clear of the mute button */
 @media (max-height: 520px) and (min-aspect-ratio: 5/4) { .hub-grid { --c: min(10vw, 25vh, 180px); } }
+
+/* Blender food art (Nov 27): PNG pizza base + toppings */
+.pizza-img { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 8px 0 rgba(0,0,0,.12)); }
+.tp img.food-img { width: 100%; height: 100%; object-fit: contain; display: block; transition: transform 1s; }
+.ghost img.food-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.tool img.food-img { width: 72%; height: 72%; object-fit: contain; }
+.pizza.baked .tp.cheese img.food-img { transform: scale(1.4, 1.25); }

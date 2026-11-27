@@ -8,6 +8,13 @@
     tomato: 'Tomato!', pineapple: 'Pineapple!', basil: 'Basil!', cheese: 'Cheese!', corn: 'Corn!', onion: 'Onion!',
     ham: 'Ham!', sausage: 'Sausage!', broccoli: 'Broccoli!', egg: 'Egg!' };
 
+  // Blender food art (approved Nov 27): photo-style PNGs for the base + 8 toppings; other toppings keep their drawn art.
+  const FOOD = { pepperoni: 1, mushroom: 1, olive: 1, pepper: 1, tomato: 1, pineapple: 1, basil: 1, cheese: 1 };
+  function topArt(kind, bin) {
+    return FOOD[kind] ? `<img class="food-img" src="assets/food/topping-${kind}.png" alt="" draggable="false">` : A.topping(kind, bin);
+  }
+  const PIZZA_IMG = '<img class="pizza-img" src="assets/food/pizza-base.png" alt="" draggable="false">';
+
   let el, cell, pizza, tops, pupEl, bins;
   let baked = false, baking = false, serving = false, drag = null, pz = null, offX = 0, offY = 0;
 
@@ -16,14 +23,14 @@
     el.innerHTML = `<button class="rbtn back corner" data-back aria-label="Back to home">${I.back}</button>
 <div class="k-main">
   <div class="k-pup"><div class="k-pupwrap">${A.pup('baby')}</div></div>
-  <div class="k-cell"><div class="pizza"><div class="pz">${A.pizzaSvg}<div class="tops"></div><div class="steam"><span></span><span></span><span></span></div><div class="oven"><div class="glow"></div>${A.ovenSvg}</div></div></div></div>
+  <div class="k-cell"><div class="pizza"><div class="pz">${PIZZA_IMG}<div class="tops"></div><div class="steam"><span></span><span></span><span></span></div><div class="oven"><div class="glow"></div>${A.ovenSvg}</div></div></div></div>
   <div class="k-btns">
     <button class="rbtn big oven-btn" aria-label="Bake in the oven">${I.oven}</button>
     <button class="rbtn big serve-btn" aria-label="Give the pizza to baby pup">${I.serve}</button>
     <button class="rbtn new-btn" aria-label="New pizza">${I.newPizza}</button>
   </div>
 </div>
-<div class="toolbar bins">${TOPS.concat(TOOLS).map(t => `<button class="tool bin${TOOLS.includes(t) ? ' kit' : ''}" data-top="${t}" aria-label="${t}">${A.topping(t, true)}</button>`).join('')}</div>`;
+<div class="toolbar bins">${TOPS.concat(TOOLS).map(t => `<button class="tool bin${TOOLS.includes(t) ? ' kit' : ''}" data-top="${t}" aria-label="${t}">${topArt(t, true)}</button>`).join('')}</div>`;
 
     cell = el.querySelector('.k-cell');
     pizza = el.querySelector('.pizza');
@@ -74,7 +81,7 @@
     try { b.setPointerCapture(e.pointerId); } catch (_) {}
     const g = document.createElement('div');
     g.className = 'ghost';
-    g.innerHTML = A.topping(b.dataset.top, true);
+    g.innerHTML = topArt(b.dataset.top, true);
     document.body.appendChild(g);
     drag = { b: b, id: e.pointerId, kind: b.dataset.top, sx: e.clientX, sy: e.clientY, g: g, moved: false };
     moveGhost(e.clientX, e.clientY);
@@ -144,7 +151,7 @@
     t.style.left = (50 + nx * 50) + '%';
     t.style.top = (50 + ny * 50) + '%';
     t.style.setProperty('--r', Math.round(Math.random() * 360) + 'deg');
-    t.innerHTML = A.topping(kind, false);
+    t.innerHTML = topArt(kind, false);
     tops.appendChild(t);
     while (tops.children.length > MAX_TOPS) tops.firstChild.remove();
   }
